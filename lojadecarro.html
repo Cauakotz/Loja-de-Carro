@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concessionaria</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Concessionaria</h1>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#clientes">Clientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#carros">Carros</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#vendas">Vendas</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+
+            <!--gestão dos clientes-->
+            <div class="tab-pane fade show active" id="clientes">
+                <h2>Gestão dos Clientes</h2>
+                <!--formulario para adicionar/editar os clientes-->
+                <form id="clientesForm"></form>
+
+                <!--tabela de clientes-->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Endereço</th>
+                            <th>Telefone</th>
+                            <th>Email</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaClientes">
+                        <!--linha da tabela dos clientes-->
+                    </tbody>
+                </table>
+            </div>
+
+            <!--gestão dos carros-->
+            <div class="tab-pane fade" id="carros">
+                <h2>Gestão de Carros</h2>
+                <!--formulario para adicionar/editar os carros-->
+                <form id="carroForm"></form>
+
+                <!--tabela dos carros-->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Ano</th>
+                            <th>Tipo</th>
+                            <th>Preço</th>
+                            <th>Disponibilidade</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaCarros">
+                        <!--linha da tabela de carros-->
+                    </tbody>
+                </table>
+            </div>
+
+            <!--registro de vendas-->
+            <div class="tab-pane fade" id="vendas">
+                <h2>Registro de Vendas</h2>
+                <form id="vendaForm"></form>
+
+                <!--tabela de vendas-->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Clientes</th>
+                            <th>Carro Vendido</th>
+                            <th>Valor Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historicoVendas">
+                        <!--linha da tabela de vendas-->
+                    </tbody>
+                </table>
+            </div>
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            <script src="script.js"></script>  
+    </body>
+</html>
