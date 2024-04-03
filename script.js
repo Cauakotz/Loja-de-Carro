@@ -1,184 +1,165 @@
-let clientes = [];
-let carros = [];
-let vendas = [];
+document.addEventListener('DOMContentLoaded', function() {
+  // Carregue os registros de vendas do localStorage
+  var registrosVendas = JSON.parse(localStorage.getItem('registrosVendas')) || [];
 
-// Função para inicializar o aplicativo
-function init() {
-  // Verifica se há dados armazenados no LocalStorage e os carrega
-  if (localStorage.getItem('clientes')) {
-    clientes = JSON.parse(localStorage.getItem('clientes'));
-    exibirClientes();
-  }
-  if (localStorage.getItem('carros')) {
-    carros = JSON.parse(localStorage.getItem('carros'));
-    exibirCarros();
-  }
-  if (localStorage.getItem('vendas')) {
-    vendas = JSON.parse(localStorage.getItem('vendas'));
-    exibirVendas();
-  }
-}
+  // Atualize a tabela de vendas
+  atualizarTabelaVendas(registrosVendas);
 
-// Função para exibir clientes na tabela
-function exibirClientes() {
-  const listaClientes = document.getElementById('listaClientes');
-  listaClientes.innerHTML = '';
-  clientes.forEach(cliente => {
-    listaClientes.innerHTML += `
-      <tr>
-        <td>${cliente.nome}</td>
-        <td>${cliente.endereco}</td>
-        <td>${cliente.telefone}</td>
-        <td>${cliente.email}</td>
-        <td>
-          <button class="btn btn-sm btn-primary" onclick="editarCliente(${cliente.id})">Editar</button>
-          <button class="btn btn-sm btn-danger" onclick="excluirCliente(${cliente.id})">Excluir</button>
-        </td>
-      </tr>
-    `;
+  // Adiciona o formulário de clientes
+  document.getElementById("clienteForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Previne o envio padrão do formulário
+
+      var nome = document.getElementById("nome").value;
+      var endereco = document.getElementById("endereco").value;
+      var telefone = document.getElementById("telefone").value;
+      var email = document.getElementById("email").value;
+
+      var cliente = {
+          nome: nome,
+          endereco: endereco,
+          telefone: telefone,
+          email: email
+      };
+
+      // Adiciona o cliente à lista de clientes
+      adicionarCliente(cliente);
+
+      this.reset(); 
   });
-}
 
-// Função para adicionar ou editar cliente
-function adicionarEditarCliente(form) {
-  const formData = new FormData(form);
-  const cliente = {
-    id: clientes.length > 0 ? clientes[clientes.length - 1].id + 1 : 1,
-    nome: formData.get('nome'),
-    endereco: formData.get('endereco'),
-    telefone: formData.get('telefone'),
-    email: formData.get('email')
-  };
-  const index = clientes.findIndex(c => c.id === cliente.id);
-  if (index === -1) {
-    clientes.push(cliente);
-  } else {
-    clientes[index] = cliente;
-  }
-  localStorage.setItem('clientes', JSON.stringify(clientes));
-  form.reset();
-  exibirClientes();
-}
+  // Adiciona o formulário de carros
+  document.getElementById("carroForm").addEventListener("submit", function(event) {
+      event.preventDefault();
 
-// Função para editar cliente
-function editarCliente(id) {
-  const cliente = clientes.find(c => c.id === id);
-  if (cliente) {
-    document.getElementById('nome').value = cliente.nome;
-    document.getElementById('endereco').value = cliente.endereco;
-    document.getElementById('telefone').value = cliente.telefone;
-    document.getElementById('email').value = cliente.email;
-  }
-}
+      var marca = document.getElementById("marca").value;
+      var modelo = document.getElementById("modelo").value;
+      var ano = document.getElementById("ano").value;
+      var tipo = document.getElementById("tipo").value;
+      var preco = document.getElementById("preco").value;
 
-// Função para excluir cliente
-function excluirCliente(id) {
-  clientes = clientes.filter(cliente => cliente.id !== id);
-  localStorage.setItem('clientes', JSON.stringify(clientes));
-  exibirClientes();
-}
+      var carro = {
+          marca: marca,
+          modelo: modelo,
+          ano: ano,
+          tipo: tipo,
+          preco: preco
+      };
 
-// Função para exibir carros na tabela
-function exibirCarros() {
-  const listaCarros = document.getElementById('listaCarros');
-  listaCarros.innerHTML = '';
-  carros.forEach(carro => {
-    listaCarros.innerHTML += `
-      <tr>
-        <td>${carro.marca}</td>
-        <td>${carro.modelo}</td>
-        <td>${carro.ano}</td>
-        <td>${carro.tipo}</td>
-        <td>${carro.preco}</td>
-        <td>${carro.disponibilidade ? 'Disponível' : 'Indisponível'}</td>
-        <td>
-          <button class="btn btn-sm btn-primary" onclick="editarCarro(${carro.id})">Editar</button>
-          <button class="btn btn-sm btn-danger" onclick="excluirCarro(${carro.id})">Excluir</button>
-        </td>
-      </tr>
-    `;
+      // Adicione o carro à lista de carros
+      adicionarCarro(carro);
+
+      this.reset(); 
   });
-}
 
-// Função para adicionar ou editar carro
-function adicionarEditarCarro(form) {
-  const formData = new FormData(form);
-  const carro = {
-    id: carros.length > 0 ? carros[carros.length - 1].id + 1 : 1,
-    marca: formData.get('marca'),
-    modelo: formData.get('modelo'),
-    ano: formData.get('ano'),
-    tipo: formData.get('tipo'),
-    preco: formData.get('preco'),
-    disponibilidade: formData.get('disponibilidade') === 'true'
-  };
-  const index = carros.findIndex(c => c.id === carro.id);
-  if (index === -1) {
-    carros.push(carro);
-  } else {
-    carros[index] = carro;
-  }
-  localStorage.setItem('carros', JSON.stringify(carros));
-  form.reset();
-  exibirCarros();
-}
+  document.getElementById("vendaForm").addEventListener("submit", function(event) {
+      event.preventDefault(); 
 
-// Função para editar carro
-function editarCarro(id) {
-  const carro = carros.find(c => c.id === id);
-  if (carro) {
-    document.getElementById('marca').value = carro.marca;
-    document.getElementById('modelo').value = carro.modelo;
-    document.getElementById('ano').value = carro.ano;
-    document.getElementById('tipo').value = carro.tipo;
-    document.getElementById('preco').value = carro.preco;
-    document.getElementById('disponibilidade').value = carro.disponibilidade;
-  }
-}
+      var cliente = document.getElementById("clienteVenda").value;
+      var carro = document.getElementById("carroVenda").value;
+      var valorTotal = document.getElementById("valorTotalVenda").value;
+      var data = new Date().toLocaleDateString(); 
 
-// Função para excluir carro
-function excluirCarro(id) {
-  carros = carros.filter(carro => carro.id !== id);
-  localStorage.setItem('carros', JSON.stringify(carros));
-  exibirCarros();
-}
+      var venda = {
+          data: data,
+          cliente: cliente,
+          carro: carro,
+          valorTotal: valorTotal
+      };
 
-// Função para exibir vendas na tabela
-function exibirVendas() {
-  const historicoVendas = document.getElementById('historicoVendas');
-  historicoVendas.innerHTML = '';
-  vendas.forEach(venda => {
-    const cliente = clientes.find(c => c.id === venda.clienteId);
-    const carro = carros.find(c => c.id === venda.carroId);
-    historicoVendas.innerHTML += `
-      <tr>
-        <td>${venda.data}</td>
-        <td>${cliente ? cliente.nome : '-'}</td>
-        <td>${carro ? `${carro.marca} ${carro.modelo}` : '-'}</td>
-        <td>${venda.valorTotal}</td>
-      </tr>
-    `;
+      var editIndex = document.getElementById("editIndex").value;
+      if (editIndex !== '') {
+          registrosVendas[editIndex] = venda;
+      } else {
+          registrosVendas.push(venda);
+      }
+
+      localStorage.setItem('registrosVendas', JSON.stringify(registrosVendas));
+
+      atualizarTabelaVendas(registrosVendas);
+
+      this.reset(); // Reseta todos os campos do formulário
+      document.getElementById("editIndex").value = ""; 
   });
-}
 
-// Função para registrar venda
-function registrarVenda(form) {
-  const formData = new FormData(form);
-  const venda = {
-    data: new Date().toLocaleDateString(),
-    clienteId: parseInt(formData.get('cliente')),
-    carroId: parseInt(formData.get('carro')),
-    valorTotal: calcularValorTotal(formData)
-  };
-  vendas.push(venda);
-  localStorage.setItem('vendas', JSON.stringify(vendas));
-  form.reset();
-  exibirVendas();
-}
+  // Função para adicionar cliente à lista de clientes
+  function adicionarCliente(cliente) {
+      var listaClientes = document.getElementById("listaClientes");
 
-// Função para calcular o valor total da venda
-function calcularValorTotal(formData) {
-  // Lógica para calcular o valor total da venda aqui
-  return 0; 
-}
-init();
+      var novaLinha = listaClientes.insertRow();
+
+      var cellNome = novaLinha.insertCell(0);
+      cellNome.textContent = cliente.nome;
+
+      var cellEndereco = novaLinha.insertCell(1);
+      cellEndereco.textContent = cliente.endereco;
+
+      var cellTelefone = novaLinha.insertCell(2);
+      cellTelefone.textContent = cliente.telefone;
+
+      var cellEmail = novaLinha.insertCell(3);
+      cellEmail.textContent = cliente.email;
+  }
+
+  // Função para adicionar carro à lista de carros
+  function adicionarCarro(carro) {
+      var listaCarros = document.getElementById("listaCarros");
+
+      var novaLinha = listaCarros.insertRow();
+
+      var cellMarca = novaLinha.insertCell(0);
+      cellMarca.textContent = carro.marca;
+
+      var cellModelo = novaLinha.insertCell(1);
+      cellModelo.textContent = carro.modelo;
+
+      var cellAno = novaLinha.insertCell(2);
+      cellAno.textContent = carro.ano;
+
+      var cellTipo = novaLinha.insertCell(3);
+      cellTipo.textContent = carro.tipo;
+
+      var cellPreco = novaLinha.insertCell(4);
+      cellPreco.textContent = carro.preco;
+  }
+
+  // Função para editar uma venda
+  function editarVenda(index) {
+      var venda = registrosVendas[index];
+
+      document.getElementById("clienteVenda").value = venda.cliente;
+      document.getElementById("carroVenda").value = venda.carro;
+      document.getElementById("valorTotalVenda").value = venda.valorTotal;
+
+      document.getElementById("editIndex").value = index;
+  }
+
+  // Função para excluir uma venda da lista
+  function excluirVenda(index) {
+
+      registrosVendas.splice(index, 1);
+
+      localStorage.setItem('registrosVendas', JSON.stringify(registrosVendas));
+
+      atualizarTabelaVendas(registrosVendas);
+  }
+
+  // Função para atualizar a tabela de vendas
+  function atualizarTabelaVendas(registrosVendas) {
+      var historicoVendas = document.getElementById("historicoVendas");
+      historicoVendas.innerHTML = ""; 
+
+      registrosVendas.forEach(function(venda, index) {
+          var novaLinha = historicoVendas.insertRow();
+          novaLinha.innerHTML = `
+              <td>${venda.data}</td>
+              <td>${venda.cliente}</td>
+              <td>${venda.carro}</td>
+              <td>${venda.valorTotal}</td>
+              <td>
+                  <button onclick="editarVenda(${index})" class="btn btn-primary btn-sm">Editar</button>
+                  <button onclick="excluirVenda(${index})" class="btn btn-danger btn-sm">Excluir</button>
+              </td>
+          `;
+      });
+  }
+});
